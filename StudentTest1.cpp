@@ -80,10 +80,12 @@ TEST_CASE("SideCrossIterator") {
     container.addElement(30);
     container.addElement(40);
 
-    SUBCASE("Iterating over elements") {
+    SUBCASE("Iterating over elements") 
+    {
         MagicalContainer::SideCrossIterator it(container);
         CHECK(*it == 10);
         ++it;
+        //cout << "the it is = " << container.numbers[it] << endl <<;
         CHECK(*it == 40);
         ++it;
         CHECK(*it == 20);

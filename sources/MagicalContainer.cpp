@@ -61,14 +61,14 @@ namespace ariel
     {
         return container.numbers[index];
     }
-    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin() const 
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin() const
     {
         AscendingIterator biter(this->container, 0);
         biter.index = 0;
         return biter;
     }
-    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end() const 
-    {   
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end() const
+    {
         AscendingIterator eiter(this->container);
         eiter.index = container.numbers.size();
         return eiter;
@@ -102,14 +102,14 @@ namespace ariel
         ++index;
         return *this;
     }
-    
+
     // ************ SideCrossIterator *************
 
     MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container, size_t forward, size_t backward) : container(container), forwardIndex(0), backwardIndex(container.numbers.size()) {}
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) : container(other.container), forwardIndex(other.forwardIndex), backwardIndex(other.backwardIndex) {}
-    int MagicalContainer::SideCrossIterator::operator*() const 
+    int MagicalContainer::SideCrossIterator::operator*() const
     {
-        if (backwardIndex >= forwardIndex)
+        if (backwardIndex > forwardIndex)
             return container.numbers[forwardIndex];
         else
             return container.numbers[backwardIndex];
@@ -120,10 +120,7 @@ namespace ariel
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const
     {
-        SideCrossIterator eiter(*this);
-        eiter.forwardIndex = container.numbers.size();
-        eiter.backwardIndex = container.numbers.size() - 1;
-        return eiter;
+        return SideCrossIterator(container, container.numbers.size(), container.numbers.size()-1);
     }
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
     {
@@ -154,26 +151,22 @@ namespace ariel
         }
         return *this;
     }
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() 
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++()
     {
-
-        for(auto i = 0; i < container.size(); i++)
+        if (*this->end())
+            __throw_runtime_error("cann't increment");
+        if(forwardIndex > backwardIndex)
+                __throw_runtime_error("Illegal");
+        if( counter % 2 == 0)
         {
-            if(forwardIndex > backwardIndex)
-                    __throw_runtime_error("Illegal");
-            if (i % 2 == 0)
-            {
-                
-                forwardIndex++;
-            }
-            else 
-            {   
-                backwardIndex--;
-            }
-           
+            this->index = forwardIndex++;
         }
-         return *this;
-
+        else
+        {
+            this->index = backwardIndex--;
+        }
+        counter++;
+        return *this;
     }
     // ************ PrimeIterator *************
 
@@ -190,12 +183,8 @@ namespace ariel
     }
     MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer &container) : container(container), index(0)
     {
-        // while (index < container.numbers.size() && !isPrime(container.numbers[index]))
-        // {
-        //     ++index;
-        // }
     }
-   
+
     MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) : container(other.container), index(other.index)
     {
     }
@@ -247,8 +236,10 @@ namespace ariel
         {
             __throw_runtime_error("The vecPrime is full!");
         }
-        else {
-            ++index;}
+        else
+        {
+            ++index;
+        }
         return *this;
     }
 }

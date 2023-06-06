@@ -52,6 +52,8 @@ namespace ariel
             const MagicalContainer &container;
             size_t forwardIndex;
             size_t backwardIndex;
+            int counter = 0;
+            size_t index = 0;
 
         public:
             SideCrossIterator(const MagicalContainer &container,size_t forward = 0,size_t backward = 0);
