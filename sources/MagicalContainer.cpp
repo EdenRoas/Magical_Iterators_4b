@@ -114,8 +114,8 @@ namespace ariel
     {
         if (backwardIndex == forwardIndex)
             return container.numbers[forwardIndex];
-        
-        return container.numbers[container.size()-1 - backwardIndex];
+
+        return container.numbers[container.size() - 1 - backwardIndex];
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() const // Return a copy of the current iterator
     {
@@ -123,16 +123,12 @@ namespace ariel
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const
     {
-        size_t endIndex = container.size() / 2;
-        if (container.size() % 2 != 0)
-        {
-            return SideCrossIterator(container, endIndex, endIndex + 1); // Odd
-        }
-        return SideCrossIterator(container, endIndex, endIndex); // Even
+        return SideCrossIterator(container, container.size(), container.size() - 1); // Return an iterator pointing to the end position
     }
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
     {
-        return (this->backwardIndex > other.backwardIndex || this->forwardIndex > other.forwardIndex);;
+        return (this->backwardIndex > other.backwardIndex || this->forwardIndex > other.forwardIndex);
+        ;
     }
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
     {
@@ -166,7 +162,7 @@ namespace ariel
             counter = 0;
             return *this;
         }
-        if(*this->end())
+        if (*this->end())
             __throw_runtime_error("Illegal");
         if (counter % 2 == 0)
         {
@@ -177,6 +173,7 @@ namespace ariel
             this->currentIndex = backwardIndex--;
         }
         counter++;
+
         return *this;
     }
     // ************ PrimeIterator *************
