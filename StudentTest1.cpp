@@ -92,6 +92,7 @@ TEST_CASE("SideCrossIterator") {
         ++it;
         CHECK(*it == 30);
         ++it;
+        
         CHECK(it == it.end());
     }
 

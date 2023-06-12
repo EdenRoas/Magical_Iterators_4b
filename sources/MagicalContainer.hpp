@@ -67,6 +67,7 @@ namespace ariel
             bool operator!=(const SideCrossIterator &other) const;
             SideCrossIterator &operator=(const SideCrossIterator &other);
             SideCrossIterator &operator++();
+            void print();
         };
         class PrimeIterator
         {

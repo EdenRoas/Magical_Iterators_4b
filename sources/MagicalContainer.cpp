@@ -108,27 +108,32 @@ namespace ariel
 
     // ************ SideCrossIterator *************
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container, size_t forward, size_t backward) : container(container), forwardIndex(0), backwardIndex(container.numbers.size() - 1) {}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container, size_t forward, size_t backward) : container(container), forwardIndex(0), backwardIndex(container.numbers.size()) {}
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) : container(other.container), forwardIndex(other.forwardIndex), backwardIndex(other.backwardIndex) {}
     int MagicalContainer::SideCrossIterator::operator*() const
     {
-        if (backwardIndex == forwardIndex)
-            return container.numbers[forwardIndex];
-
-        return container.numbers[container.size() - 1 - backwardIndex];
+        return container.numbers[this->currentIndex];
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() const // Return a copy of the current iterator
     {
         return SideCrossIterator(*this);
     }
-    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const // Return an iterator pointing to the end position
     {
-        return SideCrossIterator(container, container.size(), container.size() - 1); // Return an iterator pointing to the end position
-    }
+        size_t endIndex = container.size() / 2;
+        if (container.size() % 2 != 0)
+            return SideCrossIterator(this->container, endIndex, endIndex +1); // when size container is odd
+            
+        return SideCrossIterator(this->container, endIndex, endIndex);// when size container is even
+    }   
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
     {
         return (this->backwardIndex > other.backwardIndex || this->forwardIndex > other.forwardIndex);
-        ;
+    
+    }
+    void MagicalContainer::SideCrossIterator::print()
+    {
+        cout<<this->backwardIndex<<","<<endl;
     }
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
     {
@@ -148,7 +153,6 @@ namespace ariel
             throw runtime_error("They are diffrent containers!");
         else
         {
-
             forwardIndex = other.forwardIndex;
             backwardIndex = other.backwardIndex;
             //*this = other;
@@ -159,20 +163,23 @@ namespace ariel
     {
         if (forwardIndex == backwardIndex)
         {
-            counter = 0;
+            //counter = 0;
             return *this;
         }
-        if (*this->end())
+        if (counter == container.size())
             __throw_runtime_error("Illegal");
+        // if (*this->end())
+        //   __throw_runtime_error("out of bound!");
+        counter++;
         if (counter % 2 == 0)
         {
-            this->currentIndex = forwardIndex++;
+            this->currentIndex = ++forwardIndex;
         }
         else
         {
-            this->currentIndex = backwardIndex--;
+            this->currentIndex = --backwardIndex;
         }
-        counter++;
+        
 
         return *this;
     }
@@ -196,7 +203,7 @@ namespace ariel
     MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) : container(other.container), index(other.index)
     {
     }
-    int MagicalContainer::PrimeIterator::operator*() const // not sure
+    int MagicalContainer::PrimeIterator::operator*() const
     {
         vector<int>::size_type indexPrime = static_cast<vector<int>::size_type>(container.PrimeIterIndex[index]);
         return container.numbers[indexPrime];
