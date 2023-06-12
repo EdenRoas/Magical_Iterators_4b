@@ -53,10 +53,10 @@ namespace ariel
             size_t forwardIndex;
             size_t backwardIndex;
             int counter = 0;
-            size_t currentIndex = 0;
+            size_t currentIndex;
 
         public:
-            SideCrossIterator(const MagicalContainer &container,size_t forward = 0,size_t backward = 0);
+            SideCrossIterator(const MagicalContainer &container,size_t forward = 0 ,size_t backward = 0, size_t currIndex = 0);
             SideCrossIterator(const SideCrossIterator &other);
             int operator*() const;
             SideCrossIterator begin() const;
@@ -67,7 +67,7 @@ namespace ariel
             bool operator!=(const SideCrossIterator &other) const;
             SideCrossIterator &operator=(const SideCrossIterator &other);
             SideCrossIterator &operator++();
-            void print();
+            //void print();
         };
         class PrimeIterator
         {
