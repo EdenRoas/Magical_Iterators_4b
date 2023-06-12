@@ -91,7 +91,10 @@ namespace ariel
     }
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other)
     {
-        return *this = other;
+        if (&this->container != &other.container)
+            throw runtime_error("They are diffrent containers!");
+        else
+            return *this = other;
     }
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++()
     {
@@ -105,65 +108,73 @@ namespace ariel
 
     // ************ SideCrossIterator *************
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container, size_t forward, size_t backward) : container(container), forwardIndex(0), backwardIndex(container.numbers.size()) {}
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container, size_t forward, size_t backward) : container(container), forwardIndex(0), backwardIndex(container.numbers.size() - 1) {}
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) : container(other.container), forwardIndex(other.forwardIndex), backwardIndex(other.backwardIndex) {}
     int MagicalContainer::SideCrossIterator::operator*() const
     {
-        if (backwardIndex > forwardIndex)
+        if (backwardIndex == forwardIndex)
             return container.numbers[forwardIndex];
-        else
-            return container.numbers[backwardIndex];
+        
+        return container.numbers[container.size()-1 - backwardIndex];
     }
-    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() const
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() const // Return a copy of the current iterator
     {
         return SideCrossIterator(*this);
     }
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const
     {
-        return SideCrossIterator(container, container.numbers.size(), container.numbers.size()-1);
+        size_t endIndex = container.size() / 2;
+        if (container.size() % 2 != 0)
+        {
+            return SideCrossIterator(container, endIndex, endIndex + 1); // Odd
+        }
+        return SideCrossIterator(container, endIndex, endIndex); // Even
     }
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
     {
-        bool checkGT = (this->backwardIndex > other.backwardIndex || this->forwardIndex > other.forwardIndex);
-        return checkGT;
+        return (this->backwardIndex > other.backwardIndex || this->forwardIndex > other.forwardIndex);;
     }
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
     {
-        return !(*this > other);
+        return !(*this > other) && !(*this == other);
     }
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const
     {
-        bool equal = (this->backwardIndex == other.backwardIndex && this->forwardIndex == other.forwardIndex && &container == &other.container);
-        return equal;
+        return (this->backwardIndex == other.backwardIndex && this->forwardIndex == other.forwardIndex);
     }
     bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const
     {
         return !(*this == other);
     }
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) // not
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) // check if they are not diff contauners copy the data to the new containers
     {
         if (&this->container != &other.container)
-            throw runtime_error("They are diffrent!");
-        if (this != &other)
+            throw runtime_error("They are diffrent containers!");
+        else
         {
+
             forwardIndex = other.forwardIndex;
             backwardIndex = other.backwardIndex;
+            //*this = other;
         }
         return *this;
     }
     MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++()
     {
-        if (*this->end())
-            __throw_runtime_error("cann't increment");
-        if(forwardIndex > backwardIndex)
-                __throw_runtime_error("Illegal");
-        if( counter % 2 == 0)
+        if (forwardIndex == backwardIndex)
         {
-            this->index = forwardIndex++;
+            counter = 0;
+            return *this;
+        }
+        if(*this->end())
+            __throw_runtime_error("Illegal");
+        if (counter % 2 == 0)
+        {
+            this->currentIndex = forwardIndex++;
         }
         else
         {
-            this->index = backwardIndex--;
+            this->currentIndex = backwardIndex--;
         }
         counter++;
         return *this;

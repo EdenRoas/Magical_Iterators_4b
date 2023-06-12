@@ -14,7 +14,7 @@ namespace ariel
         //vector<std::vector<size_t>::size_type> numbers;
         vector<int> numbers;
         vector<int> PrimeIterIndex;
-        std::vector<int>::size_type primeIndex; // replace frome size_t to this because the compiler
+        std::vector<int>::size_type primeIndex; // replace frome size_t to this because the compailer
 
     public:
         MagicalContainer();                        // defult constractor
@@ -53,7 +53,7 @@ namespace ariel
             size_t forwardIndex;
             size_t backwardIndex;
             int counter = 0;
-            size_t index = 0;
+            size_t currentIndex = 0;
 
         public:
             SideCrossIterator(const MagicalContainer &container,size_t forward = 0,size_t backward = 0);
