@@ -13,8 +13,8 @@ namespace ariel
     private:
         //vector<std::vector<size_t>::size_type> numbers;
         vector<int> numbers;
-        vector<int> PrimeIterIndex;
-        std::vector<int>::size_type primeIndex; // replace frome size_t to this because the compailer
+        vector<int*> PrimeIterIndex;
+        vector<int>::size_type primeIndex; // replace frome size_t to this because the compailer
 
     public:
         MagicalContainer();                        // defult constractor
